@@ -1,0 +1,27 @@
+{
+  "name": "jasmine-object-message-prettifier",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "json-stable-stringify": "^1.0.1",
+    "jsondiffpatch": "^0.2.5",
+    "variable-diff": "^1.1.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.8.0"
+  },
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrP/jasmine-object-message-prettifier.git"
+  },
+  "author": "victor@wsdev.tech",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrP/jasmine-object-message-prettifier/issues"
+  },
+  "homepage": "https://github.com/MrP/jasmine-object-message-prettifier#readme"
+}

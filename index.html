@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            var module = {};
+            var require = function(){};
+        </script>
+        <script src="./node_modules/json-stable-stringify/index.js"></script>
+        <script>
+            var stableStringify = module.exports;
+        </script>
+        <script src="./node_modules/jsondiffpatch/public/build/jsondiffpatch.min.js"></script>
+        <script src="./node_modules/jsondiffpatch/public/build/jsondiffpatch-formatters.min.js"></script>
+        <link rel="stylesheet" href="./node_modules/jsondiffpatch/public/formatters-styles/html.css" type="text/css" />
+        <link rel="stylesheet" href="./node_modules/jsondiffpatch/public/formatters-styles/annotated.css" type="text/css" />
+        <style>
+            #example {
+                max-width: 100vw;
+                overflow: auto;
+                background: lightgrey;
+
+            }
+            #container {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: stretch;
+                align-content: stretch;
+                justify-content: space-around;
+            }
+            #textarea {
+                flex: 0 0 40vw;
+                height: 50vh;
+                display: block;
+            }
+            #prettydiff {
+                flex: 0 0 40vw;
+                height: 50vh;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <h1></h1>
+        <p>Paste in the textarea the text copied raw from your console, even if it looks like this:</p>
+        <pre id="example">
+  TestName
+    update stuff
+      ×testcase should do the stuff
+        Expected Object({ foo: 'Blah', bar: 'aaa', coolName: 'value', numeric: 2, propertyName: 5, someId: 5, someOtherId: 6, name: '3', prop: '4', id: undefined }) to equal Object({ foo: 'Blah', bar: 'aaa', coolN
+ame: 'value', numeric: 2, propertyName: 4, someId: 5, someOtherId: 6, name: '3', prop: '4' }).
+            at ZoneDelegate.invoke (webpack:///./node_modules/zo
+
+        </pre>
+        <p>Note that existing properties set to undefined will be displayed as "null" instead. </p>
+        <div id="container">
+            <textarea id="textarea"></textarea>
+            <div id="prettydiff">The diff will appear here</div>
+        </div>
+        <script>
+            var textarea = document.getElementById("textarea");
+            var prettydiff = document.getElementById('prettydiff');
+
+            function eventHandler(event) {
+                var text = textarea.value.split(/\n/).join('');
+                var parts = text.split(/\) to equal Object\(/);
+                if (!parts || parts.length <=1 || parts.length > 2) {
+                    error();
+                }
+                var actual = parts[0].replace(/^.*?Expected Object\(/,'').replace(/^.*?([{[])/,'$1');
+                var expected = parts[1].replace(/([}\]]).*?$/, '$1');
+                var actualObj;
+                eval("actualObj = " + actual);
+                var expectedObj;
+                eval("expectedObj = " + expected);
+                actualObj = JSON.parse(JSON.stringify(actualObj, (k,v)=>v===undefined?null:v));
+                expectedObj = JSON.parse(JSON.stringify(expectedObj, (k,v)=>v===undefined?null:v));
+                var delta = jsondiffpatch.diff(actualObj, expectedObj);
+                prettydiff.innerHTML = jsondiffpatch.formatters.html.format(delta, actualObj);
+            }
+            // textarea.addEventListener('change', eventHandler);
+            textarea.addEventListener('input', eventHandler);
+
+            function error() {
+                prettydiff.textContent = "Oops, something went wrong!";
+            }
+        </script>
+    </body>
+</html>
