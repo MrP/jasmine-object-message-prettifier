@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.html",
   "dependencies": {
-    "json-stable-stringify": "^1.0.1",
     "jsondiffpatch": "^0.2.5",
     "variable-diff": "^1.1.0"
   },
