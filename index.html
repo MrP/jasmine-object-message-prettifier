@@ -58,12 +58,20 @@ ame: 'value', numeric: 2, propertyName: 4, someId: 5, someOtherId: 6, name: '3',
                 var text = textarea.value.split(/\n/).join('');
                 var parts = text.split(/\) to equal Object\(/);
                 if (!parts || parts.length <=1 || parts.length > 2) {
+                    parts = text.split(/ but actual calls were /);
+                }
+                if (!parts || parts.length <=1 || parts.length > 2) {
                     error();
                 }
-                var actual = parts[0].replace(/^.*?Expected Object\(/,'').replace(/^.*?([{[])/,'$1');
-                var expected = parts[1].replace(/([}\]]).*?$/, '$1');
+                var actual = parts[0].replace(/^.*?([{[])/,'$1');
+                actual = actual.replace(/Object\(\{/g, '{').replace(/\}\)/g, '}');
+                var expected = parts[1].replace(/([\}\]])[^\}\]]*?$/, '$1');
+                // console.log('expected', expected, 'parts[1]', parts[1]);
+                expected = expected.replace(/Object\(\{/g, '{').replace(/\}\)/g, '}');
+                // console.log('actual', actual);
                 var actualObj;
                 eval("actualObj = " + actual);
+                // console.log('expected', expected, 'parts[1]', parts[1]);
                 var expectedObj;
                 eval("expectedObj = " + expected);
                 actualObj = JSON.parse(JSON.stringify(actualObj, (k,v)=>v===undefined?null:v));
