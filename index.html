@@ -58,6 +58,15 @@ ame: 'value', numeric: 2, propertyName: 4, someId: 5, someOtherId: 6, name: '3',
                 var text = textarea.value.split(/\n/).join('');
                 var parts = text.split(/\) to equal Object\(/);
                 if (!parts || parts.length <=1 || parts.length > 2) {
+                    parts = text.split(/ to equal Object\(/);
+                }
+                if (!parts || parts.length <=1 || parts.length > 2) {
+                    parts = text.split(/\) to equal /);
+                }
+                if (!parts || parts.length <=1 || parts.length > 2) {
+                    parts = text.split(/ to equal /);
+                }
+                if (!parts || parts.length <=1 || parts.length > 2) {
                     parts = text.split(/ but actual calls were /);
                 }
                 if (!parts || parts.length <=1 || parts.length > 2) {
