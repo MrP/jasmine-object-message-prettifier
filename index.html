@@ -56,6 +56,7 @@ ame: 'value', numeric: 2, propertyName: 4, someId: 5, someOtherId: 6, name: '3',
 
             function eventHandler(event) {
                 var text = textarea.value.split(/\n/).join('');
+                text = text.replace(/<jasmine.anything>/g, '"<jasmine.anything>"');
                 var parts = text.split(/\) to equal Object\(/);
                 if (!parts || parts.length <=1 || parts.length > 2) {
                     parts = text.split(/ to equal Object\(/);
